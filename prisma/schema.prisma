@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// NOTE: Les champs DateTime utilisent UTC par défaut
+// Pour obtenir l'heure française, utilisez une fonction de conversion côté application
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id  String    @id @default(cuid())
+  email String  @unique
+  name  String?
+  pin   String  @unique
+}
+
+// Monnaie
+model Changes {
+  id  String    @id @default(cuid())
+  name String
+  value Float @default(0) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+}
+
+// Historique des monnaies
+model ChangesHistory {
+  id  String    @id @default(cuid())
+  name String
+  value Float @default(0) 
+  createdAt DateTime @default(now())
+}
+
+// Avoir
+model credits {
+  id  String    @id @default(cuid())
+  name String
+  value Float @default(0) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+}
+
+// Historique des avoirs
+model creditsHistory {
+  id  String    @id
+  name String
+  value Float @default(0) 
+  createdAt DateTime @default(now())
+}
+
+// Investissement
+model Investments {
+  id  String    @id @default(cuid())
+  name String 
+  value Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+}
+
+// Historique des investissements
+model InvestmentsHistory {
+  id  String    @id @default(cuid())
+  name String 
+  value Int @default(0)
+  createdAt DateTime @default(now())
+}
+
+// Avoir en guinée
+model GuineeCredits {
+  id  String    @id @default(cuid())
+  name String
+  value Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+}
+
+// Historique des avoirs en guinée
+model GuineeCreditsHistory {
+  id  String    @id @default(cuid())
+  name String
+  value Int @default(0)
+  createdAt DateTime @default(now())
+}
