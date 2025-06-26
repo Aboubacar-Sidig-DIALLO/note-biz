@@ -18,7 +18,7 @@ export interface HistoryModel {
 }
 
 // Configuration des modèles
-export interface ModelConfig<T extends BaseModel> {
+export interface ModelConfig {
   modelName: keyof PrismaClient;
   historyModelName: keyof PrismaClient;
 }
@@ -26,9 +26,9 @@ export interface ModelConfig<T extends BaseModel> {
 // Service générique CRUD
 export class GenericCrudService<T extends BaseModel> {
   private prisma: PrismaClient;
-  private config: ModelConfig<T>;
+  private config: ModelConfig;
 
-  constructor(config: ModelConfig<T>) {
+  constructor(config: ModelConfig) {
     this.prisma = prisma;
     this.config = config;
   }
@@ -158,20 +158,20 @@ export class GenericCrudService<T extends BaseModel> {
 // Configuration des modèles spécifiques
 export const modelConfigs = {
   changes: {
-    modelName: "changes" as keyof PrismaClient,
-    historyModelName: "changesHistory" as keyof PrismaClient,
+    modelName: "Changes" as keyof PrismaClient,
+    historyModelName: "ChangesHistory" as keyof PrismaClient,
   },
   credits: {
     modelName: "credits" as keyof PrismaClient,
     historyModelName: "creditsHistory" as keyof PrismaClient,
   },
   investments: {
-    modelName: "investments" as keyof PrismaClient,
-    historyModelName: "investmentsHistory" as keyof PrismaClient,
+    modelName: "Investments" as keyof PrismaClient,
+    historyModelName: "InvestmentsHistory" as keyof PrismaClient,
   },
   guineeCredits: {
-    modelName: "guineeCredits" as keyof PrismaClient,
-    historyModelName: "guineeCreditsHistory" as keyof PrismaClient,
+    modelName: "GuineeCredits" as keyof PrismaClient,
+    historyModelName: "GuineeCreditsHistory" as keyof PrismaClient,
   },
 };
 
