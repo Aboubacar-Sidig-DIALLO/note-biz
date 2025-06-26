@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default function AuthError() {
+function AuthErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
@@ -79,5 +80,34 @@ export default function AuthError() {
         </Card>
       </motion.div>
     </div>
+  );
+}
+
+export default function AuthError() {
+  return (
+    <Suspense
+      fallback={
+        <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 p-4'>
+          <div className='w-full max-w-md'>
+            <Card className='w-full'>
+              <CardHeader className='text-center'>
+                <div className='w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center'>
+                  <div className='w-10 h-10 bg-gray-300 rounded animate-pulse'></div>
+                </div>
+                <h1 className='text-2xl font-bold text-gray-900 dark:text-white'>
+                  Chargement...
+                </h1>
+              </CardHeader>
+              <CardContent className='text-center'>
+                <p className='text-gray-600 dark:text-gray-300 mb-6'>
+                  Chargement de la page d&apos;erreur...
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      }>
+      <AuthErrorContent />
+    </Suspense>
   );
 }

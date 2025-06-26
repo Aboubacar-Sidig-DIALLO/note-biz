@@ -200,10 +200,36 @@ export class GenericCrudService<T extends BaseModel> {
         },
       });
 
-      return { success: true, message: "Enregistrement restauré avec succès" };
+      return {
+        success: true,
+        message: "Enregistrement restauré avec succès",
+      };
     } catch (error) {
       console.error("Erreur lors de la restauration:", error);
       return { success: false, message: "Erreur lors de la restauration" };
+    }
+  }
+
+  // Hard delete - supprimer définitivement
+  async hardDelete(id: string): Promise<{ success: boolean; message: string }> {
+    try {
+      const model = this.prisma[
+        this.config.modelName
+      ] as PrismaClient[keyof PrismaClient];
+      await (model as any).delete({
+        where: { id },
+      });
+
+      return {
+        success: true,
+        message: "Enregistrement supprimé définitivement",
+      };
+    } catch (error) {
+      console.error("Erreur lors de la suppression définitive:", error);
+      return {
+        success: false,
+        message: "Erreur lors de la suppression définitive",
+      };
     }
   }
 }
@@ -211,24 +237,20 @@ export class GenericCrudService<T extends BaseModel> {
 // Configuration des modèles spécifiques
 export const modelConfigs = {
   changes: {
-    modelName: "changes" as keyof PrismaClient,
-    historyModelName: "changesHistory" as keyof PrismaClient,
-    excludeFromHistory: ["id"],
+    modelName: "Changes" as keyof PrismaClient,
+    historyModelName: "ChangesHistory" as keyof PrismaClient,
   },
   credits: {
     modelName: "credits" as keyof PrismaClient,
     historyModelName: "creditsHistory" as keyof PrismaClient,
-    excludeFromHistory: ["id"],
   },
   investments: {
-    modelName: "investments" as keyof PrismaClient,
-    historyModelName: "investmentsHistory" as keyof PrismaClient,
-    excludeFromHistory: ["id"],
+    modelName: "Investments" as keyof PrismaClient,
+    historyModelName: "InvestmentsHistory" as keyof PrismaClient,
   },
   guineeCredits: {
-    modelName: "guineeCredits" as keyof PrismaClient,
-    historyModelName: "guineeCreditsHistory" as keyof PrismaClient,
-    excludeFromHistory: ["id"],
+    modelName: "GuineeCredits" as keyof PrismaClient,
+    historyModelName: "GuineeCreditsHistory" as keyof PrismaClient,
   },
 };
 
