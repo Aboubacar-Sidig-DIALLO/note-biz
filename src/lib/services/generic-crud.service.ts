@@ -1,11 +1,13 @@
 import { PrismaClient } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
+import { getUserIdFromSession } from "@/lib/user-session";
 
-// Types génériques pour les modèles
+// Types génériques pour les modèles avec userId
 export interface BaseModel {
   id: string;
   name: string;
   value: number;
+  userId: string;
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -14,6 +16,7 @@ export interface HistoryModel {
   id: string;
   name: string;
   value: number;
+  userId: string;
   createdAt: Date;
 }
 
@@ -23,7 +26,7 @@ export interface ModelConfig {
   historyModelName: keyof PrismaClient;
 }
 
-// Service générique CRUD
+// Service générique CRUD avec support utilisateur
 export class GenericCrudService<T extends BaseModel> {
   private prisma: PrismaClient;
   private config: ModelConfig;
@@ -33,60 +36,107 @@ export class GenericCrudService<T extends BaseModel> {
     this.config = config;
   }
 
-  // Créer un nouvel enregistrement
-  async create(data: Omit<T, "id" | "createdAt" | "updatedAt">): Promise<T> {
+  // Créer un nouvel enregistrement pour l'utilisateur connecté
+  async create(
+    data: Omit<T, "id" | "createdAt" | "updatedAt" | "userId">
+  ): Promise<T> {
+    const userId = await getUserIdFromSession();
+    if (!userId) {
+      throw new Error("Utilisateur non authentifié");
+    }
+
     const model = this.prisma[
       this.config.modelName
     ] as PrismaClient[keyof PrismaClient];
+
     return await (model as any).create({
-      data,
+      data: {
+        ...data,
+        userId,
+      },
     });
   }
 
-  // Récupérer tous les enregistrements
+  // Récupérer tous les enregistrements de l'utilisateur connecté
   async findAll(): Promise<T[]> {
+    const userId = await getUserIdFromSession();
+    if (!userId) {
+      throw new Error("Utilisateur non authentifié");
+    }
+
     const model = this.prisma[
       this.config.modelName
     ] as PrismaClient[keyof PrismaClient];
+
     return await (model as any).findMany({
+      where: {
+        userId,
+      },
       orderBy: {
         createdAt: "desc",
       },
     });
   }
 
-  // Récupérer un enregistrement par ID
+  // Récupérer un enregistrement par ID (seulement pour l'utilisateur connecté)
   async findById(id: string): Promise<T | null> {
+    const userId = await getUserIdFromSession();
+    if (!userId) {
+      throw new Error("Utilisateur non authentifié");
+    }
+
     const model = this.prisma[
       this.config.modelName
     ] as PrismaClient[keyof PrismaClient];
-    return await (model as any).findUnique({
-      where: { id },
+
+    return await (model as any).findFirst({
+      where: {
+        id,
+        userId,
+      },
     });
   }
 
-  // Mettre à jour un enregistrement
+  // Mettre à jour un enregistrement (seulement pour l'utilisateur connecté)
   async update(
     id: string,
-    data: Partial<Omit<T, "id" | "createdAt" | "updatedAt">>
+    data: Partial<Omit<T, "id" | "createdAt" | "updatedAt" | "userId">>
   ): Promise<T> {
+    const userId = await getUserIdFromSession();
+    if (!userId) {
+      throw new Error("Utilisateur non authentifié");
+    }
+
     const model = this.prisma[
       this.config.modelName
     ] as PrismaClient[keyof PrismaClient];
+
     return await (model as any).update({
-      where: { id },
+      where: {
+        id,
+        userId,
+      },
       data,
     });
   }
 
-  // Supprimer un enregistrement (hard delete)
+  // Supprimer un enregistrement (seulement pour l'utilisateur connecté)
   async delete(id: string): Promise<{ success: boolean; message: string }> {
     try {
+      const userId = await getUserIdFromSession();
+      if (!userId) {
+        throw new Error("Utilisateur non authentifié");
+      }
+
       const model = this.prisma[
         this.config.modelName
       ] as PrismaClient[keyof PrismaClient];
+
       await (model as any).delete({
-        where: { id },
+        where: {
+          id,
+          userId,
+        },
       });
 
       return { success: true, message: "Enregistrement supprimé avec succès" };
@@ -96,29 +146,47 @@ export class GenericCrudService<T extends BaseModel> {
     }
   }
 
-  // Récupérer tous les enregistrements de l'historique
+  // Récupérer l'historique de l'utilisateur connecté
   async getAllHistory(): Promise<HistoryModel[]> {
+    const userId = await getUserIdFromSession();
+    if (!userId) {
+      throw new Error("Utilisateur non authentifié");
+    }
+
     const historyModel = this.prisma[
       this.config.historyModelName
     ] as PrismaClient[keyof PrismaClient];
+
     return await (historyModel as any).findMany({
+      where: {
+        userId,
+      },
       orderBy: {
         createdAt: "desc",
       },
     });
   }
 
-  // Déplacer vers l'historique (soft delete manuel)
+  // Déplacer vers l'historique (seulement pour l'utilisateur connecté)
   async moveToHistory(
     id: string
   ): Promise<{ success: boolean; message: string }> {
     try {
+      const userId = await getUserIdFromSession();
+      if (!userId) {
+        throw new Error("Utilisateur non authentifié");
+      }
+
       // 1. Récupérer l'enregistrement original
       const model = this.prisma[
         this.config.modelName
       ] as PrismaClient[keyof PrismaClient];
-      const record = await (model as any).findUnique({
-        where: { id },
+
+      const record = await (model as any).findFirst({
+        where: {
+          id,
+          userId,
+        },
       });
 
       if (!record) {
@@ -129,16 +197,21 @@ export class GenericCrudService<T extends BaseModel> {
       const historyModel = this.prisma[
         this.config.historyModelName
       ] as PrismaClient[keyof PrismaClient];
+
       await (historyModel as any).create({
         data: {
           name: record.name,
           value: record.value,
+          userId,
         },
       });
 
       // 3. Supprimer de la table principale
       await (model as any).delete({
-        where: { id },
+        where: {
+          id,
+          userId,
+        },
       });
 
       return {
@@ -152,6 +225,39 @@ export class GenericCrudService<T extends BaseModel> {
         message: "Erreur lors du déplacement vers l'historique",
       };
     }
+  }
+
+  // Nouvelle méthode: créer avec userId explicite (pour migrations/admin)
+  async createWithUserId(
+    data: Omit<T, "id" | "createdAt" | "updatedAt">,
+    userId: string
+  ): Promise<T> {
+    const model = this.prisma[
+      this.config.modelName
+    ] as PrismaClient[keyof PrismaClient];
+
+    return await (model as any).create({
+      data: {
+        ...data,
+        userId,
+      },
+    });
+  }
+
+  // Nouvelle méthode: récupérer pour un utilisateur spécifique (pour admin)
+  async findAllForUser(userId: string): Promise<T[]> {
+    const model = this.prisma[
+      this.config.modelName
+    ] as PrismaClient[keyof PrismaClient];
+
+    return await (model as any).findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }
 }
 

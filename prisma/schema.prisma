@@ -18,76 +18,121 @@ datasource db {
 }
 
 model User {
-  id  String    @id @default(cuid())
-  email String  @unique
+  id    String @id @default(cuid())
+  email String @unique
   name  String?
-  pin   String  @unique
+  pin   String @unique
+  
+  // Relations avec les modèles de données
+  changes         Changes[]
+  changesHistory  ChangesHistory[]
+  credits         credits[]
+  creditsHistory  creditsHistory[]
+  investments     Investments[]
+  investmentsHistory InvestmentsHistory[]
+  guineeCredits   GuineeCredits[]
+  guineeCreditsHistory GuineeCreditsHistory[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Monnaie
 model Changes {
-  id  String    @id @default(cuid())
-  name String
-  value Float @default(0) 
+  id        String   @id @default(cuid())
+  name      String
+  value     Float    @default(0) 
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
 }
 
 // Historique des monnaies
 model ChangesHistory {
-  id  String    @id @default(cuid())
-  name String
-  value Float @default(0) 
+  id        String   @id @default(cuid())
+  name      String
+  value     Float    @default(0) 
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  
+  @@index([userId])
 }
 
 // Avoir
 model credits {
-  id  String    @id @default(cuid())
-  name String
-  value Float @default(0) 
+  id        String   @id @default(cuid())
+  name      String
+  value     Float    @default(0) 
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
 }
 
 // Historique des avoirs
 model creditsHistory {
-  id  String    @id @default(cuid())
-  name String
-  value Float @default(0) 
+  id        String   @id @default(cuid())
+  name      String
+  value     Float    @default(0) 
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  
+  @@index([userId])
 }
 
 // Investissement
 model Investments {
-  id  String    @id @default(cuid())
-  name String 
-  value Int @default(0)
+  id        String   @id @default(cuid())
+  name      String 
+  value     Int      @default(0)
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
 }
 
 // Historique des investissements
 model InvestmentsHistory {
-  id  String    @id @default(cuid())
-  name String 
-  value Int @default(0)
+  id        String   @id @default(cuid())
+  name      String 
+  value     Int      @default(0)
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  
+  @@index([userId])
 }
 
 // Avoir en guinée
 model GuineeCredits {
-  id  String    @id @default(cuid())
-  name String
-  value Int @default(0)
+  id        String   @id @default(cuid())
+  name      String
+  value     Int      @default(0)
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt // Met à jour automatiquement la date de modification à chaque changement
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
 }
 
 // Historique des avoirs en guinée
 model GuineeCreditsHistory {
-  id  String    @id @default(cuid())
-  name String
-  value Int @default(0)
+  id        String   @id @default(cuid())
+  name      String
+  value     Int      @default(0)
+  userId    String   // Référence vers l'utilisateur
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  
+  @@index([userId])
 }
