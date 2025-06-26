@@ -31,7 +31,7 @@ const NavMain = () => {
   ];
 
   return (
-    <nav className='relative flex flex-row gap-5 p-2 bg-primary/10 backdrop-blur-sm rounded-full shadow-sm border-2 border-black'>
+    <nav className='relative flex flex-row gap-5 p-2 bg-primary/10 backdrop-blur-sm rounded-full shadow-sm border-2 border-black z-50'>
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (
