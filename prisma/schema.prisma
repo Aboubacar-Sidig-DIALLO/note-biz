@@ -52,7 +52,7 @@ model credits {
 
 // Historique des avoirs
 model creditsHistory {
-  id  String    @id
+  id  String    @id @default(cuid())
   name String
   value Float @default(0) 
   createdAt DateTime @default(now())

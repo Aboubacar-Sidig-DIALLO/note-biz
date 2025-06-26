@@ -162,7 +162,7 @@ export const BizInput = ({
               <div className='relative flex flex-row items-center text-lg text-end px-2 font-medium'>
                 <div
                   className={cn(
-                    "relative z-20 mr-2",
+                    "relative mr-2",
                     !isAmountVisible ? "blur-sm" : "blur-none"
                   )}>
                   {editedMontant.toLocaleString("fr-FR", {
@@ -172,7 +172,7 @@ export const BizInput = ({
                 </div>
                 <button
                   onClick={() => setIsAmountVisible(!isAmountVisible)}
-                  className='p-1 text-gray-500 hover:text-gray-700 z-30'
+                  className='p-1 text-gray-500 hover:text-gray-700'
                   aria-label={
                     !isAmountVisible
                       ? "Masquer le montant"
