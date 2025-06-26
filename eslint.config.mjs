@@ -31,10 +31,8 @@ const eslintConfig = [
         },
       ],
       "@typescript-eslint/no-unused-expressions": "error",
-      "@typescript-eslint/no-empty-object-type": "warn",
-      "@typescript-eslint/no-empty-interface": "warn",
-      "@typescript-eslint/no-console": "warn",
       "react-hooks/exhaustive-deps": "warn",
+      "no-console": "warn",
     },
   },
 ];
