@@ -3,6 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import BizCard from "@/components/bizCard";
 import { useState, useEffect } from "react";
+import { cn } from "@/utils/dateUtils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Interface pour les statistiques du dashboard
 interface DashboardStats {
@@ -30,13 +32,19 @@ interface DashboardStats {
 
 // Composant wrapper pour les effets d'animation
 const AnimatedCardWrapper = ({ children }: { children: React.ReactNode }) => {
+  const isMobile = useIsMobile();
   return (
     <div className='group relative'>
       {/* Effet de brillance au survol */}
       <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 -skew-x-10 translate-x-[-100%] z-10 pointer-events-none' />
 
       {/* Effet de bordure animée */}
-      <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 blur-[1px] z-10 pointer-events-none' />
+      <div
+        className={cn(
+          "absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 blur-[1px] z-10 pointer-events-none",
+          isMobile ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+        )}
+      />
 
       {children}
     </div>
