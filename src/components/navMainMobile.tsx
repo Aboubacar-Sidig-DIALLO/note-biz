@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   Drawer,
@@ -7,11 +9,13 @@ import {
   DrawerTrigger,
 } from "./ui/drawer";
 import { AlignCenter } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const NavMainMobile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const current = usePathname();
+  const isDashboardActive = current === "/dashboard";
 
   const handleNavigation = (href: string) => {
     setIsOpen(false);
@@ -32,15 +36,18 @@ const NavMainMobile = () => {
 
         <div className='p-6 space-y-4'>
           {/* Section Dashboard */}
-          <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
-            <button
-              onClick={() => handleNavigation("/dashboard")}
-              className='w-full flex justify-center items-center py-4'>
-              <span className='text-sm font-medium text-gray-700'>
-                Dashboard
-              </span>
-            </button>
-          </div>
+          {Boolean(!isDashboardActive) && (
+            <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
+              <button
+                onClick={() => handleNavigation("/dashboard")}
+                className='w-full flex justify-center items-center py-4'>
+                <span className='text-sm font-medium text-gray-700'>
+                  Dashboard
+                </span>
+              </button>
+            </div>
+          )}
+
           {/* Section Avoirs */}
           <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
             <button
