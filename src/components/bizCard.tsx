@@ -110,7 +110,7 @@ const BizCard = ({ title, activeItems, historyUrl }: BizCardProps) => {
             className='w-full group/btn relative overflow-hidden transition-all duration-500 hover:shadow-lg hover:shadow-purple-500/25 border-0 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-purple-500 hover:to-pink-500 hover:text-white rounded-xl font-medium'>
             <Link
               href={historyUrl}
-              className='flex items-center justify-center gap-3 py-3'>
+              className='flex items-center justify-center gap-3 py-3 shadow-lg shadow-purple-500/25'>
               <span className='relative z-10'>Voir l&apos;historique</span>
               <motion.div
                 className='relative z-10'

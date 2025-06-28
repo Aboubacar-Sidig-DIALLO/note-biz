@@ -6,6 +6,7 @@ import { Checkbox } from "./ui/checkbox";
 import { motion } from "framer-motion";
 import { cn } from "@/utils/dateUtils";
 import AlerteBiz from "./alerteBiz";
+import { ConfirmationSecret } from "./ConfirmationSecret";
 
 interface BizInputProps {
   prenomNom: string;
@@ -34,7 +35,7 @@ export const BizInput = ({
     montant?: string;
   }>({});
   const [isAmountVisible, setIsAmountVisible] = useState(false);
-
+  const [showAmountConfirmation, setShowAmountConfirmation] = useState(false);
   const validateFields = () => {
     const newErrors: { prenomNom?: string; montant?: string } = {};
 
@@ -93,6 +94,32 @@ export const BizInput = ({
     setIsEditing(false);
     setShowConfirmDialog(false);
     setErrors({});
+  };
+
+  const handleAmountConfirmation = async (secret: string): Promise<boolean> => {
+    try {
+      const response = await fetch("/api/user/secret", {
+        method: "POST",
+        body: JSON.stringify({ secret }),
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-auth": process.env.INTERNAL_AUTH_SECRET || "secret-auth",
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setIsAmountVisible(true);
+        setShowAmountConfirmation(false);
+        return true;
+      } else {
+        console.log("Erreur lors de la vérification du secret:", data);
+        // Réinitialiser isSecretValid après l'animation
+        return false;
+      }
+    } catch (error) {
+      console.log("Erreur lors de la vérification du secret:", error);
+      return false;
+    }
   };
 
   return (
@@ -171,7 +198,13 @@ export const BizInput = ({
                   })}
                 </div>
                 <button
-                  onClick={() => setIsAmountVisible(!isAmountVisible)}
+                  onClick={() => {
+                    if (!isAmountVisible) {
+                      setShowAmountConfirmation(true);
+                    } else {
+                      setIsAmountVisible(!isAmountVisible);
+                    }
+                  }}
                   className='p-1 text-gray-500 hover:text-gray-700'
                   aria-label={
                     !isAmountVisible
@@ -220,7 +253,12 @@ export const BizInput = ({
           )}
         </div>
       </div>
-
+      <ConfirmationSecret
+        isOpen={showAmountConfirmation}
+        onClose={() => setShowAmountConfirmation(false)}
+        onConfirm={handleAmountConfirmation}
+        title="Confirmation d'accès au montant"
+      />
       <AlerteBiz
         isOpen={showConfirmDialog}
         onClose={handleCancelSave}

@@ -9,10 +9,10 @@ export async function POST(req: Request) {
     // Vérifier l'authentification interne
     await verifyInternalAuth();
 
-    const { pin } = await req.json();
+    const { secret } = await req.json();
 
-    if (!pin || typeof pin !== "string") {
-      return NextResponse.json({ error: "PIN requis" }, { status: 400 });
+    if (!secret || typeof secret !== "string") {
+      return NextResponse.json({ error: "Secret requis" }, { status: 400 });
     }
 
     const user = await prisma.user.findFirst({
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       select: {
         name: true,
         email: true,
-        pin: true,
+        secret: true,
       },
     });
 
@@ -33,17 +33,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verify the pin against the stored hashed pin
-    const isValidPin = await verifyPin(pin, user.pin);
-    if (!isValidPin) {
-      return NextResponse.json({ error: "PIN incorrect" }, { status: 401 });
+    // Vérifier le secret contre le secret hashé stocké
+    const isValidSecret = await verifyPin(secret, user.secret);
+    if (!isValidSecret) {
+      return NextResponse.json({ error: "Secret incorrect" }, { status: 401 });
     }
 
-    // Ne pas renvoyer le PIN hashé
-    const { pin: _, ...userWithoutPin } = user;
-    return NextResponse.json(userWithoutPin);
+    // Ne pas renvoyer le secret hashé
+    const { secret: _, ...userWithoutSecret } = user;
+    return NextResponse.json(userWithoutSecret);
   } catch (error) {
-    console.error("Error verifying user:", error);
+    console.error("Erreur lors de la vérification du secret:", error);
     if (error instanceof Error && error.message === "Non autorisé") {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }

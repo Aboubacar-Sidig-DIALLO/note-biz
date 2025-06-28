@@ -24,7 +24,7 @@ const NavMainMobile = () => {
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger className='bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-full shadow-lg p-4'>
+      <DrawerTrigger className='bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-400 hover:to-purple-400 rounded-full shadow-lg p-3'>
         <AlignCenter className='w-8 h-8 text-white' />
       </DrawerTrigger>
       <DrawerContent className='bg-primary/10 backdrop-blur-sm'>

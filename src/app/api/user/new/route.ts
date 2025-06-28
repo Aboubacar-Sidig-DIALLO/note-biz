@@ -5,12 +5,12 @@ import { hashPin } from "@/helpers/bcrypt";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, name, pin } = body;
+    const { email, name, pin, secret } = body;
 
     // Validation basique
-    if (!email || !pin) {
+    if (!email || !pin || !secret) {
       return NextResponse.json(
-        { error: "Email et PIN requis" },
+        { error: "Email, PIN ou Secret requis" },
         { status: 400 }
       );
     }
@@ -18,6 +18,13 @@ export async function POST(req: NextRequest) {
     if (pin.length != 6) {
       return NextResponse.json(
         { error: "Le PIN doit contenir 6 caractères" },
+        { status: 400 }
+      );
+    }
+
+    if (secret.length !== 6) {
+      return NextResponse.json(
+        { error: "Le Secret doit contenir 6 caractères" },
         { status: 400 }
       );
     }
@@ -36,6 +43,7 @@ export async function POST(req: NextRequest) {
 
     // Hasher le PIN
     const hashedPin = await hashPin(pin);
+    const hashedSecret = await hashPin(secret);
 
     // Créer l'utilisateur
     const newUser = await prisma.user.create({
@@ -43,6 +51,7 @@ export async function POST(req: NextRequest) {
         email,
         name: name || null,
         pin: hashedPin,
+        secret: hashedSecret,
       },
       select: {
         id: true,
