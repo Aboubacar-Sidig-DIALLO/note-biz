@@ -52,7 +52,7 @@ export default function GenericBizPage({ config }: GenericBizPageProps) {
             title={config.title}
             buttonLabel={config.buttonLabel}
             onAddClick={() => setIsOpen(true)}
-            className='flex-col md:flex-row gap-4'
+            className='flex-col md:flex-row gap-5'
           />
 
           {!loading && !error && entities.length === 0 && (
