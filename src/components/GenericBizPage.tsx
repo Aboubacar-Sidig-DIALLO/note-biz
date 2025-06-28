@@ -72,7 +72,7 @@ export default function GenericBizPage({ config }: GenericBizPageProps) {
             </div>
           )}
 
-          <div className='flex flex-col items-center gap-4'>
+          <div className='flex flex-col items-center gap-4 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide'>
             <AnimatePresence>
               {entities.map((entity, index) => (
                 <motion.div
