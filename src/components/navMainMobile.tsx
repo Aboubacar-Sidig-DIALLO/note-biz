@@ -10,12 +10,13 @@ import {
 } from "./ui/drawer";
 import { AlignCenter } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { NAV_ITEMS } from "@/constants/navigation";
+import { NavButtonMobile } from "./navButtonMobile";
 
 const NavMainMobile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const current = usePathname();
-  const isDashboardActive = current === "/dashboard";
+  const pathname = usePathname();
 
   const handleNavigation = (href: string) => {
     setIsOpen(false);
@@ -35,58 +36,14 @@ const NavMainMobile = () => {
         </DrawerHeader>
 
         <div className='p-6 space-y-4'>
-          {/* Section Dashboard */}
-          {Boolean(!isDashboardActive) && (
-            <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
-              <button
-                onClick={() => handleNavigation("/dashboard")}
-                className='w-full flex justify-center items-center py-4'>
-                <span className='text-sm font-medium text-gray-700'>
-                  Dashboard
-                </span>
-              </button>
-            </div>
-          )}
-
-          {/* Section Avoirs */}
-          <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
-            <button
-              onClick={() => handleNavigation("/credits")}
-              className='w-full flex justify-center items-center py-4'>
-              <span className='text-sm font-medium text-gray-700'>Avoirs</span>
-            </button>
-          </div>
-
-          {/* Section Monnaie */}
-          <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
-            <button
-              onClick={() => handleNavigation("/changes")}
-              className='w-full flex justify-center items-center py-4'>
-              <span className='text-sm font-medium text-gray-700'>Monnaie</span>
-            </button>
-          </div>
-
-          {/* Section Avoirs en Guinée */}
-          <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
-            <button
-              onClick={() => handleNavigation("/guinee-credits")}
-              className='w-full flex justify-center items-center py-4'>
-              <span className='text-sm font-medium text-gray-700'>
-                Avoirs en Guinée
-              </span>
-            </button>
-          </div>
-
-          {/* Section Investissements */}
-          <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
-            <button
-              onClick={() => handleNavigation("/investments")}
-              className='w-full flex justify-center items-center py-4'>
-              <span className='text-sm font-medium text-gray-700'>
-                Investissements
-              </span>
-            </button>
-          </div>
+          {NAV_ITEMS.map((item) => (
+            <NavButtonMobile
+              key={item.href}
+              item={item}
+              onClick={handleNavigation}
+              isActive={pathname === item.href}
+            />
+          ))}
         </div>
       </DrawerContent>
     </Drawer>
