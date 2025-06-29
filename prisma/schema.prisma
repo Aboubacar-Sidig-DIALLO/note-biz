@@ -92,3 +92,38 @@ model GuineeCreditsHistory {
   value Int @default(0)
   createdAt DateTime @default(now())
 }
+
+// Payables
+model Payables {
+  id  String    @id @default(cuid())
+  name String
+  value Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // 
+}
+
+// PayablesHistory
+model PayablesHistory {
+  id  String    @id @default(cuid())
+  name String
+  value Int @default(0)
+  createdAt DateTime @default(now())
+}
+
+// Receivables
+model Receivables {
+  id  String    @id @default(cuid())
+  name String
+  value Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // 
+}
+
+// ReceivablesHistory
+model ReceivablesHistory {
+  id  String    @id @default(cuid())
+  name String
+  value Int @default(0)
+  createdAt DateTime @default(now())
+}
+

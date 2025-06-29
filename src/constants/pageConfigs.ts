@@ -38,4 +38,22 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     emptyStateDescription:
       "Il n'y a actuellement aucun investissement enregistré. Ajoutez votre premier investissement pour commencer.",
   },
+  payables: {
+    model: "payables",
+    title: "Dettes",
+    buttonLabel: "Ajouter une dette",
+    addModalTitle: "Ajouter une dette",
+    emptyStateTitle: "Aucune dette",
+    emptyStateDescription:
+      "Il n'y a actuellement aucune dette enregistrée. Ajoutez votre première dette pour commencer.",
+  },
+  receivables: {
+    model: "receivables",
+    title: "Crédits",
+    buttonLabel: "Ajouter un crédit",
+    addModalTitle: "Ajouter un crédit",
+    emptyStateTitle: "Aucun crédit",
+    emptyStateDescription:
+      "Il n'y a actuellement aucun crédit enregistré. Ajoutez votre premier crédit pour commencer.",
+  },
 };

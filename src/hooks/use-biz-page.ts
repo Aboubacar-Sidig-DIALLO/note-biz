@@ -1,17 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { useCrud } from "@/hooks/use-crud";
 import { BizEntity } from "@/components/GenericBizPage";
+import { MODELS } from "@/constants/constant";
 
 interface UseBizPageProps {
   model: string;
 }
 
 // Type pour les modèles Prisma - doit correspondre aux types dans use-crud.ts
-export type PrismaModel =
-  | "changes"
-  | "credits"
-  | "investments"
-  | "guinee-credits";
+export type PrismaModel = MODELS;
 
 export function useBizPage({ model }: UseBizPageProps) {
   const [isOpen, setIsOpen] = useState(false);
