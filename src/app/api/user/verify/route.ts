@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { EMAIL_DEFAULT } from "@/app/constants/constant";
+import { EMAIL_DEFAULT } from "@/constants/constant";
 import { verifyPin } from "@/helpers/bcrypt";
 import { verifyInternalAuth } from "@/services/verifyInternalAuth";
 

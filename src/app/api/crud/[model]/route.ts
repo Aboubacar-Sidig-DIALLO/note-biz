@@ -4,6 +4,8 @@ import {
   creditsService,
   investmentsService,
   guineeCreditsService,
+  payablesService,
+  receivablesService,
 } from "@/lib/services/generic-crud.service";
 
 // Mapping des modèles vers leurs services
@@ -12,6 +14,8 @@ const modelServices: Record<string, any> = {
   credits: creditsService,
   investments: investmentsService,
   "guinee-credits": guineeCreditsService,
+  payables: payablesService,
+  receivables: receivablesService,
 };
 
 // GET - Récupérer tous les enregistrements ou un enregistrement spécifique

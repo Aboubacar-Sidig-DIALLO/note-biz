@@ -28,6 +28,16 @@ interface DashboardStats {
     activeItems: number;
     historyUrl: string;
   };
+  payables: {
+    title: string;
+    activeItems: number;
+    historyUrl: string;
+  };
+  receivables: {
+    title: string;
+    activeItems: number;
+    historyUrl: string;
+  };
 }
 
 // Composant wrapper pour les effets d'animation
@@ -80,7 +90,14 @@ const DashboardPage = () => {
 
   // Convertir les stats en tableau pour l'affichage
   const clients = stats
-    ? [stats.credits, stats.changes, stats.guineeCredits, stats.investments]
+    ? [
+        stats.credits,
+        stats.changes,
+        stats.guineeCredits,
+        stats.investments,
+        stats.payables,
+        stats.receivables,
+      ]
     : [];
 
   if (loading) {
@@ -117,7 +134,7 @@ const DashboardPage = () => {
       <div className='container mx-auto p-4'>
         <h1 className='text-2xl font-bold mb-6'>Dashboard</h1>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-2'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-2 h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide'>
           <AnimatePresence>
             {clients.map((client, index) => (
               <motion.div
