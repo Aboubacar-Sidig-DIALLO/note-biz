@@ -173,6 +173,14 @@ export const modelConfigs = {
     modelName: "GuineeCredits" as keyof PrismaClient,
     historyModelName: "GuineeCreditsHistory" as keyof PrismaClient,
   },
+  payables: {
+    modelName: "Payables" as keyof PrismaClient,
+    historyModelName: "PayablesHistory" as keyof PrismaClient,
+  },
+  receivables: {
+    modelName: "Receivables" as keyof PrismaClient,
+    historyModelName: "ReceivablesHistory" as keyof PrismaClient,
+  },
 };
 
 // Instances des services pour chaque modèle
@@ -183,4 +191,8 @@ export const investmentsService = new GenericCrudService(
 );
 export const guineeCreditsService = new GenericCrudService(
   modelConfigs.guineeCredits
+);
+export const payablesService = new GenericCrudService(modelConfigs.payables);
+export const receivablesService = new GenericCrudService(
+  modelConfigs.receivables
 );

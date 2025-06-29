@@ -4,16 +4,27 @@ import {
   creditsService,
   investmentsService,
   guineeCreditsService,
+  receivablesService,
+  payablesService,
 } from "@/lib/services/generic-crud.service";
 
 export async function GET() {
   try {
     // Récupérer le nombre d'éléments actifs pour chaque modèle
-    const [changes, credits, guineeCredits, investments] = await Promise.all([
+    const [
+      changes,
+      credits,
+      guineeCredits,
+      investments,
+      payables,
+      receivables,
+    ] = await Promise.all([
       changesService.findAll(),
       creditsService.findAll(),
       guineeCreditsService.findAll(),
       investmentsService.findAll(),
+      payablesService.findAll(),
+      receivablesService.findAll(),
     ]);
 
     const stats = {
@@ -36,6 +47,16 @@ export async function GET() {
         title: "Investissements",
         activeItems: investments.length,
         historyUrl: "/history/investments",
+      },
+      payables: {
+        title: "Dettes",
+        activeItems: payables.length,
+        historyUrl: "/history/payables",
+      },
+      receivables: {
+        title: "Crédits",
+        activeItems: receivables.length,
+        historyUrl: "/history/receivables",
       },
     };
 

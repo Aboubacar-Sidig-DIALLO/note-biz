@@ -1,3 +1,4 @@
+import { MODELS } from "@/constants/constant";
 import { useState, useCallback } from "react";
 
 // Types pour les réponses API
@@ -10,7 +11,7 @@ interface ApiResponse<T> {
 
 // Types pour les paramètres
 interface CrudParams {
-  model: "changes" | "credits" | "investments" | "guinee-credits";
+  model: MODELS;
 }
 
 interface CreateParams<T> extends CrudParams {

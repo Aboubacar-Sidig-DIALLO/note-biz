@@ -194,8 +194,8 @@ export default function PinLogin() {
       <motion.div
         animate={error ? "shake" : { borderRadius: "1.2rem" }}
         variants={shakeAnimation}
-        className='w-full max-w-md relative z-10'>
-        <Card className='w-full max-w-md backdrop-blur-sm bg-white/90 dark:bg-slate-900/90 border border-slate-200/20 shadow-xl'>
+        className='w-full flex justify-center items-center relative z-10'>
+        <Card className='w-full max-w-xs backdrop-blur-sm bg-white/90 dark:bg-slate-900/90 border border-slate-200/20 shadow-xl'>
           <CardHeader className='text-center'>
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
@@ -244,12 +244,12 @@ export default function PinLogin() {
                       variants={itemAnimation}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className='relative'>
+                      className='relative flex items-center justify-center'>
                       {number === "delete" ? (
                         <Button
                           variant='outline'
                           onClick={handleDelete}
-                          className='w-full h-10 relative overflow-hidden group'>
+                          className='w-15 h-15 rounded-full relative overflow-hidden group'>
                           <motion.span
                             initial={{ x: 0 }}
                             whileHover={{ x: -5 }}
@@ -267,7 +267,7 @@ export default function PinLogin() {
                         <Button
                           variant='outline'
                           onClick={() => handleNumberClick(number)}
-                          className='w-full h-10 relative overflow-hidden group'>
+                          className='w-15 h-15 rounded-full relative overflow-hidden group'>
                           <motion.span
                             initial={{ y: 0 }}
                             whileHover={{ y: -2 }}
