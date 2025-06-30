@@ -214,7 +214,7 @@ export const BizInput = ({
                   <motion.div
                     animate={{ rotate: isAmountVisible ? 0 : 180 }}
                     transition={{ duration: 0.3 }}>
-                    {isAmountVisible ? (
+                    {!isAmountVisible ? (
                       <Eye className='w-4 h-4' />
                     ) : (
                       <EyeOff className='w-4 h-4' />
