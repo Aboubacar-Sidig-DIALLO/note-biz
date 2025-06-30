@@ -5,37 +5,44 @@ import BizCard from "@/components/bizCard";
 import { useState, useEffect } from "react";
 import { cn } from "@/utils/dateUtils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ConfirmationSecret } from "@/components/ConfirmationSecret";
 
 // Interface pour les statistiques du dashboard
 interface DashboardStats {
   changes: {
     title: string;
     activeItems: number;
+    somme: number;
     historyUrl: string;
   };
   credits: {
     title: string;
     activeItems: number;
+    somme: number;
     historyUrl: string;
   };
   guineeCredits: {
     title: string;
     activeItems: number;
+    somme: number;
     historyUrl: string;
   };
   investments: {
     title: string;
     activeItems: number;
+    somme: number;
     historyUrl: string;
   };
   payables: {
     title: string;
     activeItems: number;
+    somme: number;
     historyUrl: string;
   };
   receivables: {
     title: string;
     activeItems: number;
+    somme: number;
     historyUrl: string;
   };
 }
@@ -65,6 +72,9 @@ const DashboardPage = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSecretConfirmation, setShowSecretConfirmation] = useState(false);
+  const [canShowAmount, setCanShowAmount] = useState(false);
+  const [activeCard, setActiveCard] = useState(-1);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -129,6 +139,32 @@ const DashboardPage = () => {
     );
   }
 
+  const handleConfirmSecret = async (secret: string) => {
+    try {
+      const response = await fetch("/api/user/secret", {
+        method: "POST",
+        body: JSON.stringify({ secret }),
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-auth": process.env.INTERNAL_AUTH_SECRET || "secret-auth",
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setShowSecretConfirmation(false);
+        setCanShowAmount(true);
+        return true;
+      } else {
+        setCanShowAmount(false);
+        console.log("Erreur lors de la vérification du secret:", data);
+        return false;
+      }
+    } catch (error) {
+      console.log("Erreur lors de la vérification du secret:", error);
+      return false;
+    }
+  };
+
   return (
     <main className='min-h-screen relative bg-white'>
       <div className='container mx-auto p-4'>
@@ -162,6 +198,13 @@ const DashboardPage = () => {
                     title={client.title}
                     activeItems={client.activeItems}
                     historyUrl={client.historyUrl}
+                    somme={client.somme}
+                    setShowSecretConfirmation={setShowSecretConfirmation}
+                    canShowAmount={canShowAmount}
+                    setCanShowAmount={setCanShowAmount}
+                    index={index}
+                    setActiveCard={setActiveCard}
+                    activeCard={activeCard}
                   />
                 </AnimatedCardWrapper>
               </motion.div>
@@ -169,6 +212,14 @@ const DashboardPage = () => {
           </AnimatePresence>
         </div>
       </div>
+      <ConfirmationSecret
+        isOpen={showSecretConfirmation}
+        onClose={() => {
+          setShowSecretConfirmation(false);
+          setActiveCard(-1);
+        }}
+        onConfirm={handleConfirmSecret}
+      />
     </main>
   );
 };

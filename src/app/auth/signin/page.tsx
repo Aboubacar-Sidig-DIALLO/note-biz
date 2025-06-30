@@ -86,11 +86,8 @@ export default function PinLogin() {
   }, []);
 
   const handleNumberClick = (number: number | string) => {
-    console.log("Current PIN:", pin);
     if (pin.length < 6) {
-      console.log("Adding number:", number);
       setPin((prev) => prev + number);
-      console.log("PINS:", pin);
     }
   };
 
@@ -249,7 +246,7 @@ export default function PinLogin() {
                         <Button
                           variant='outline'
                           onClick={handleDelete}
-                          className='w-15 h-15 rounded-full relative overflow-hidden group'>
+                          className='w-15 h-15 rounded-full relative overflow-hidden group shadow-lg'>
                           <motion.span
                             initial={{ x: 0 }}
                             whileHover={{ x: -5 }}
@@ -267,7 +264,7 @@ export default function PinLogin() {
                         <Button
                           variant='outline'
                           onClick={() => handleNumberClick(number)}
-                          className='w-15 h-15 rounded-full relative overflow-hidden group'>
+                          className='w-15 h-15 rounded-full relative overflow-hidden group shadow-lg'>
                           <motion.span
                             initial={{ y: 0 }}
                             whileHover={{ y: -2 }}
