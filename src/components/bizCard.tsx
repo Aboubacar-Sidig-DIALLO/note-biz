@@ -92,17 +92,23 @@ const BizCard = ({
             <div className='space-y-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
-                  <motion.div
-                    className='relative'
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}>
-                    <div className='w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg shadow-green-500/50' />
-                    <div className='absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-ping opacity-75' />
-                  </motion.div>
+                  {activeItems > 0 ? (
+                    <motion.div
+                      className='relative'
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}>
+                      <div className='w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 shadow-lg shadow-green-500/50' />
+                      <div className='absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-ping opacity-75' />
+                    </motion.div>
+                  ) : (
+                    <div className='relative'>
+                      <div className='w-3 h-3 rounded-full bg-gradient-to-r from-gray-300 to-gray-400 shadow-sm' />
+                    </div>
+                  )}
                   <span className='text-sm font-medium text-gray-600 group-hover:text-gray-700 transition-colors duration-300'>
                     Éléments actifs
                   </span>

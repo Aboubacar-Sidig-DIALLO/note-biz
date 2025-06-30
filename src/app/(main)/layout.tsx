@@ -15,12 +15,12 @@ export default function MainLayout({
     <ProtectedRoute>
       {children}
       {!isMobile && (
-        <div className='fixed bottom-10 left-1/2 -translate-x-1/2'>
+        <div className='fixed bottom-3 left-1/2 -translate-x-1/2'>
           <NavMain />
         </div>
       )}
       {isMobile && (
-        <div className='fixed bottom-10 right-10'>
+        <div className='fixed bottom-3 right-10'>
           <NavMainMobile />
         </div>
       )}

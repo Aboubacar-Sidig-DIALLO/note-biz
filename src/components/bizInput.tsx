@@ -36,6 +36,8 @@ export const BizInput = ({
   }>({});
   const [isAmountVisible, setIsAmountVisible] = useState(false);
   const [showAmountConfirmation, setShowAmountConfirmation] = useState(false);
+  const [caller, setCaller] = useState<string>("");
+
   const validateFields = () => {
     const newErrors: { prenomNom?: string; montant?: string } = {};
 
@@ -96,7 +98,10 @@ export const BizInput = ({
     setErrors({});
   };
 
-  const handleAmountConfirmation = async (secret: string): Promise<boolean> => {
+  const handleAmountConfirmation = async (
+    secret: string,
+    caller: string
+  ): Promise<boolean> => {
     try {
       const response = await fetch("/api/user/secret", {
         method: "POST",
@@ -108,7 +113,11 @@ export const BizInput = ({
       });
       const data = await response.json();
       if (response.ok) {
-        setIsAmountVisible(true);
+        if (caller === "show") {
+          setIsAmountVisible(true);
+        } else {
+          handleEditClick();
+        }
         setShowAmountConfirmation(false);
         return true;
       } else {
@@ -201,6 +210,7 @@ export const BizInput = ({
                   onClick={() => {
                     if (!isAmountVisible) {
                       setShowAmountConfirmation(true);
+                      setCaller("show");
                     } else {
                       setIsAmountVisible(!isAmountVisible);
                     }
@@ -230,7 +240,14 @@ export const BizInput = ({
           {!isEditing && (
             <div className='flex items-center flex-row ml-2 gap-2'>
               <button
-                onClick={handleEditClick}
+                onClick={() => {
+                  if (!isAmountVisible) {
+                    setCaller("edit");
+                    setShowAmountConfirmation(true);
+                  } else {
+                    setIsAmountVisible(!isAmountVisible);
+                  }
+                }}
                 className='p-2 text-gray-600 hover:text-blue-600'
                 aria-label='Modifier'>
                 <Edit2 className='w-3 h-3' />
@@ -256,7 +273,7 @@ export const BizInput = ({
       <ConfirmationSecret
         isOpen={showAmountConfirmation}
         onClose={() => setShowAmountConfirmation(false)}
-        onConfirm={handleAmountConfirmation}
+        onConfirm={(value) => handleAmountConfirmation(value, caller as string)}
         title="Confirmation d'accès au montant"
       />
       <AlerteBiz

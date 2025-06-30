@@ -15,7 +15,7 @@ export function Header({
 }: HeaderProps) {
   return (
     <div
-      className={`flex items-center justify-between mb-6 px-4 py-2 ${className}`}>
+      className={`flex items-center justify-between mb-2 px-4 py-2 ${className}`}>
       <h1 className='text-2xl font-bold'>{title}</h1>
       <AddButton
         label={buttonLabel}
