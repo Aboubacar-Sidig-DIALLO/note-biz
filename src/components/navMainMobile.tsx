@@ -31,11 +31,11 @@ const NavMainMobile = () => {
       <DrawerContent className='bg-primary/10 backdrop-blur-sm'>
         <DrawerHeader>
           <DrawerTitle className='text-center text-xl font-semibold text-gray-900'>
-            Navigation
+            Note-Biz
           </DrawerTitle>
         </DrawerHeader>
 
-        <div className='p-6 space-y-4'>
+        <div className='p-6 space-y-4 overflow-y-auto scrollbar-hide max-h-[calc(100vh-150px)]'>
           {NAV_ITEMS.map((item) => (
             <NavButtonMobile
               key={item.href}
