@@ -99,7 +99,7 @@ export function ConfirmationSecret({
             <Button
               variant='ghost'
               size='icon'
-              className='h-8 w-8'
+              className='h-8 w-8 bg-green-100 ms-2'
               onClick={() => {
                 setError(false);
                 onClose();
