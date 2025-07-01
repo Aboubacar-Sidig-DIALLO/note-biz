@@ -166,50 +166,52 @@ const DashboardPage = () => {
   };
 
   return (
-    <main className='min-h-screen relative bg-white'>
-      <div className='container mx-auto p-4'>
+    <main className='relative bg-white scrollbar-hide h-screen overflow-hidden'>
+      <div className='container mx-auto p-4 h-full'>
         <h1 className='text-2xl font-bold mb-6'>Dashboard</h1>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-2 h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide'>
-          <AnimatePresence>
-            {clients.map((client, index) => (
-              <motion.div
-                key={client.title}
-                initial={{ y: 100, opacity: 0 }}
-                animate={{
-                  y: 0,
-                  opacity: 1,
-                  transition: {
-                    type: "spring",
-                    stiffness: 100,
-                    damping: 10,
-                    delay: index * 0.1,
-                  },
-                }}
-                exit={{ y: -100, opacity: 0 }}
-                whileHover={{
-                  y: -4,
-                  scale: 1.01,
-                  transition: { duration: 0.3, ease: "easeOut" },
-                }}
-                className='cursor-pointer'>
-                <AnimatedCardWrapper>
-                  <BizCard
-                    title={client.title}
-                    activeItems={client.activeItems}
-                    historyUrl={client.historyUrl}
-                    somme={client.somme}
-                    setShowSecretConfirmation={setShowSecretConfirmation}
-                    canShowAmount={canShowAmount}
-                    setCanShowAmount={setCanShowAmount}
-                    index={index}
-                    setActiveCard={setActiveCard}
-                    activeCard={activeCard}
-                  />
-                </AnimatedCardWrapper>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+        <div className='h-[calc(100vh-5rem)] overflow-y-auto scrollbar-hide'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-2'>
+            <AnimatePresence>
+              {clients.map((client, index) => (
+                <motion.div
+                  key={client.title}
+                  initial={{ y: 100, opacity: 0 }}
+                  animate={{
+                    y: 0,
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 10,
+                      delay: index * 0.1,
+                    },
+                  }}
+                  exit={{ y: -100, opacity: 0 }}
+                  whileHover={{
+                    y: -4,
+                    scale: 1.01,
+                    transition: { duration: 0.3, ease: "easeOut" },
+                  }}
+                  className='cursor-pointer'>
+                  <AnimatedCardWrapper>
+                    <BizCard
+                      title={client.title}
+                      activeItems={client.activeItems}
+                      historyUrl={client.historyUrl}
+                      somme={client.somme}
+                      setShowSecretConfirmation={setShowSecretConfirmation}
+                      canShowAmount={canShowAmount}
+                      setCanShowAmount={setCanShowAmount}
+                      index={index}
+                      setActiveCard={setActiveCard}
+                      activeCard={activeCard}
+                    />
+                  </AnimatedCardWrapper>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
       <ConfirmationSecret
