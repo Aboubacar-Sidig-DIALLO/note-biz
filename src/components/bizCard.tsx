@@ -42,12 +42,12 @@ const BizCard = ({
         initial={{ opacity: 0, y: 20, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{
-          duration: 0.6,
+          duration: 0.4,
           ease: [0.25, 0.46, 0.45, 0.94],
           delay: Math.random() * 0.2,
         }}
         className='group relative'>
-        <Card className='relative overflow-hidden transition-all duration-200 border-0 bg-gradient-to-br from-white/80 via-white/60 to-white/40 backdrop-blur-xl backdrop-saturate-150 rounded-2xl'>
+        <Card className='relative overflow-hidden border-0 bg-gradient-to-br from-white/80 via-white/60 to-white/40 backdrop-blur-xl backdrop-saturate-150 rounded-2xl shadow-all-sides'>
           {/* Effet de particules flottantes */}
           <div className='absolute inset-0 overflow-hidden'>
             <motion.div
@@ -152,8 +152,10 @@ const BizCard = ({
                     setActiveCard(index);
                     if (canShowAmount) {
                       setCanShowAmount(false);
-                      setShowSecretConfirmation(true);
-                    } else setShowSecretConfirmation(!canShowAmount);
+                      setShowSecretConfirmation(activeCard !== index);
+                    } else {
+                      setShowSecretConfirmation(!canShowAmount);
+                    }
                   }}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}

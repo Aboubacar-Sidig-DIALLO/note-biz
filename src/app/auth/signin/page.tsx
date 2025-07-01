@@ -190,9 +190,9 @@ export default function PinLogin() {
       <motion.div
         animate={error ? "shake" : { borderRadius: "1.2rem" }}
         variants={shakeAnimation}
-        className='w-full flex justify-center items-center relative z-10'>
-        <Card className='w-full max-w-xs backdrop-blur-sm bg-white/90 dark:bg-slate-900/90 border border-slate-200/20 shadow-xl'>
-          <CardHeader className='text-center'>
+        className='h-full flex justify-center items-center z-10 shadow-2xl'>
+        <Card className='min-w-xs backdrop-blur-sm bg-white/90 dark:bg-slate-900/90 border border-slate-200/20 shadow-xl'>
+          <CardHeader className='text-center whitespace-nowrap'>
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}

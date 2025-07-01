@@ -35,6 +35,15 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
+.shadow-all-sides {
+  box-shadow: 0 -4px 6px -1px hsl(255 86% 66% / 0.1),
+    /* Haut - plus subtil */ 4px 0 6px -1px hsl(255 86% 66% / 0.1),
+    /* Droite - plus prononcé */ 0 4px 6px -1px hsl(255 86% 66% / 0.15),
+    /* Bas - plus prononcé */ -4px 0 6px -1px hsl(255 86% 66% / 0.1),
+    /* Gauche - plus subtil */ /* Effet de brillance intérieur */ inset 0 1px
+      2px hsl(255 86% 66% / 0.05);
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.3588 0.1354 278.6973);
