@@ -160,7 +160,6 @@ export default function PinLogin() {
     <div className='min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900'>
       {/* Animated background elements */}
       <div className='absolute inset-0 w-full h-full'>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1Ii8+PC9zdmc+')] opacity-30"></div>
         <div className='absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-slate-900/30'></div>
         {mounted && (
           <>
@@ -191,9 +190,9 @@ export default function PinLogin() {
       <motion.div
         animate={error ? "shake" : { borderRadius: "1.2rem" }}
         variants={shakeAnimation}
-        className='w-full flex justify-center items-center relative z-10'>
-        <Card className='w-full max-w-xs backdrop-blur-sm bg-white/90 dark:bg-slate-900/90 border border-slate-200/20 shadow-xl'>
-          <CardHeader className='text-center'>
+        className='h-full flex justify-center items-center z-10 shadow-2xl'>
+        <Card className='min-w-xs backdrop-blur-sm bg-white/90 dark:bg-slate-900/90 border border-slate-200/20 shadow-xl'>
+          <CardHeader className='text-center whitespace-nowrap'>
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}

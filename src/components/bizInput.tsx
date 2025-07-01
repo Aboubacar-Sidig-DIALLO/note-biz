@@ -192,7 +192,7 @@ export const BizInput = ({
             <motion.div
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+              transition={{ duration: 0.3, type: "spring", stiffness: 100 }}
               className='flex flex-row flex-1 justify-between gap-3'>
               <h3 className='text-lg px-2 text-gray-800'>{editedPrenomNom}</h3>
               <div className='relative flex flex-row items-center text-lg text-end px-2 font-medium'>

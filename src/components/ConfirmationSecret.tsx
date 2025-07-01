@@ -93,7 +93,7 @@ export function ConfirmationSecret({
           animate={error ? "shake" : { borderRadius: "1.2rem" }}
           variants={shakeAnimation}
           exit={{ scale: 0.95, opacity: 0 }}
-          className='relative z-50 max-w-md overflow-hidden rounded-lg bg-background p-6 shadow-lg'>
+          className='relative z-50 max-w-md overflow-hidden rounded-lg bg-background p-6 shadow-all-sides'>
           <div className='flex items-center justify-between'>
             <h2 className='text-lg font-semibold'>{title}</h2>
             <Button
