@@ -22,7 +22,7 @@ export function EmptyState({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={cn(
-        "flex flex-col items-center justify-center min-h-[400px] px-4 py-8 text-center",
+        "flex flex-col items-center justify-center px-4 py-8 text-center",
         className
       )}>
       <motion.div

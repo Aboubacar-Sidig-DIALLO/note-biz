@@ -46,8 +46,8 @@ export default function GenericBizPage({ config }: GenericBizPageProps) {
 
   return (
     <>
-      <main className='min-h-screen relative bg-white'>
-        <div className='container mx-auto p-4'>
+      <main className='h-screen fixed inset-0 bg-white overflow-hidden scrollbar-hide'>
+        <div className='container mx-auto p-4 h-full'>
           <Header
             title={config.title}
             buttonLabel={config.buttonLabel}
