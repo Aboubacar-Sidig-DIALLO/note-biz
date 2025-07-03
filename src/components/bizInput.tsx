@@ -192,19 +192,26 @@ export const BizInput = ({
             <motion.div
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, type: "spring", stiffness: 100 }}
+              transition={{ duration: 0.2, type: "spring", stiffness: 100 }}
               className='flex flex-row flex-1 justify-between gap-3'>
               <h3 className='text-lg px-2 text-gray-800'>{editedPrenomNom}</h3>
               <div className='relative flex flex-row items-center text-lg text-end px-2 font-medium'>
                 <div
                   className={cn(
-                    "relative mr-2",
+                    "relative mr-2 select-none cursor-none",
                     !isAmountVisible ? "blur-sm" : "blur-none"
-                  )}>
-                  {editedMontant.toLocaleString("fr-FR", {
-                    style: "currency",
-                    currency: "EUR",
-                  })}
+                  )}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}>
+                  {isAmountVisible
+                    ? editedMontant.toLocaleString("fr-FR", {
+                        style: "currency",
+                        currency: "EUR",
+                      })
+                    : // Utiliser des caractères de remplacement quand le montant est masqué
+                      "*****"}
                 </div>
                 <button
                   onClick={() => {

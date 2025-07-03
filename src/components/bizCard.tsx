@@ -138,14 +138,21 @@ const BizCard = ({
                 <Sparkles className='w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
                 <span
                   className={cn(
-                    "text-3xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent",
+                    "text-3xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent select-none cursor-none",
                     activeCard !== index
                       ? "blur-sm"
                       : activeCard === index && !canShowAmount
                       ? "blur-sm"
                       : "blur-none"
-                  )}>
-                  {somme.toLocaleString()}
+                  )}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}>
+                  {activeCard !== index ||
+                  (activeCard === index && !canShowAmount)
+                    ? "*****"
+                    : somme.toLocaleString()}
                 </span>
                 <motion.button
                   onClick={() => {
