@@ -166,7 +166,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <main className='relative bg-white scrollbar-hide h-screen overflow-hidden'>
+    <main className='relative bg-white h-screen overflow-hidden mb-15 overflow-y-auto scrollbar-hide'>
       <div className='container mx-auto p-4 h-full'>
         <h1 className='text-2xl font-bold mb-6'>Dashboard</h1>
 

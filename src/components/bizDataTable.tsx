@@ -13,7 +13,14 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Search, Filter } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Search,
+  Filter,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -34,58 +41,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-// Données enrichies avec plus de détails
-// const data: DataProps[] = [
-//   {
-//     id: "1",
-//     clientName: "Ken Johnson",
-//     amount: 316,
-//     date: "2024-01-15",
-//   },
-//   {
-//     id: "2",
-//     clientName: "Abraham Smith",
-//     amount: 242,
-//     date: "2024-01-14",
-//   },
-//   {
-//     id: "3",
-//     clientName: "Monserrat Garcia",
-//     amount: 837,
-//     date: "2024-01-13",
-//   },
-//   {
-//     id: "4",
-//     clientName: "Silas Rodriguez",
-//     amount: 874,
-//     date: "2024-01-12",
-//   },
-//   {
-//     id: "5",
-//     clientName: "Carmella Wilson",
-//     amount: 721,
-//     date: "2024-01-11",
-//   },
-//   {
-//     id: "6",
-//     clientName: "Sarah Davis",
-//     amount: 1250,
-//     date: "2024-01-10",
-//   },
-//   {
-//     id: "7",
-//     clientName: "Mike Thompson",
-//     amount: 543,
-//     date: "2024-01-09",
-//   },
-//   {
-//     id: "8",
-//     clientName: "Lisa Anderson",
-//     amount: 892,
-//     date: "2024-01-08",
-//   },
-// ];
+import { cn } from "@/utils/dateUtils";
+import { motion } from "framer-motion";
+import { ConfirmationSecret } from "./ConfirmationSecret";
 
 type BizDataTableProps = {
   title: string;
@@ -99,93 +57,6 @@ type DataProps = {
   date: string;
 };
 
-export const columns: ColumnDef<DataProps>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Sélectionner tout'
-        className='data-[state=checked]:bg-primary data-[state=checked]:border-primary'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Sélectionner la ligne'
-        className='data-[state=checked]:bg-primary data-[state=checked]:border-primary'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "clientName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className='h-auto p-0 font-semibold text-foreground hover:bg-transparent hover:text-primary transition-colors'>
-          Client
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className='flex flex-col'>
-        <span className='font-medium text-foreground'>
-          {row.getValue("clientName")}
-        </span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "amount",
-    header: ({ column }) => (
-      <Button
-        variant='ghost'
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className='h-auto p-0 font-semibold text-foreground hover:bg-transparent hover:text-primary transition-colors'>
-        Montant
-        <ArrowUpDown className='ml-2 h-4 w-4' />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("fr-FR", {
-        style: "currency",
-        currency: "EUR",
-      }).format(amount);
-
-      return (
-        <div className='text-start'>
-          <div className='font-semibold text-foreground'>{formatted}</div>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => {
-      const date = new Date(row.getValue("date"));
-      const formatted = date.toLocaleDateString("fr-FR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-
-      return <div className='text-sm text-muted-foreground'>{formatted}</div>;
-    },
-  },
-];
-
 export default function BizDataTable({ title, data }: BizDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -194,7 +65,159 @@ export default function BizDataTable({ title, data }: BizDataTableProps) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [visibleAmounts, setVisibleAmounts] = React.useState<
+    Record<string, boolean>
+  >({});
+  const [showAmountConfirmation, setShowAmountConfirmation] =
+    React.useState(false);
+  const [selectedRowId, setSelectedRowId] = React.useState<string | null>(null);
   const isMobile = useIsMobile();
+
+  const handleAmountConfirmation = async (secret: string): Promise<boolean> => {
+    try {
+      const response = await fetch("/api/user/secret", {
+        method: "POST",
+        body: JSON.stringify({ secret }),
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-auth": process.env.INTERNAL_AUTH_SECRET || "secret-auth",
+        },
+      });
+      const data = await response.json();
+      if (response.ok && selectedRowId) {
+        setVisibleAmounts((prev) => ({ ...prev, [selectedRowId]: true }));
+        setShowAmountConfirmation(false);
+        setSelectedRowId(null);
+        return true;
+      } else {
+        console.log("Erreur lors de la vérification du secret:", data);
+        return false;
+      }
+    } catch (error) {
+      console.log("Erreur lors de la vérification du secret:", error);
+      return false;
+    }
+  };
+
+  const columns: ColumnDef<DataProps>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label='Sélectionner tout'
+          className='data-[state=checked]:bg-primary data-[state=checked]:border-primary'
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label='Sélectionner la ligne'
+          className='data-[state=checked]:bg-primary data-[state=checked]:border-primary'
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "clientName",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className='h-auto p-0 font-semibold text-foreground hover:bg-transparent hover:text-primary transition-colors'>
+            Client
+            <ArrowUpDown className='ml-2 h-4 w-4' />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className='flex flex-col'>
+          <span className='font-medium text-foreground'>
+            {row.getValue("clientName")}
+          </span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "amount",
+      header: ({ column }) => (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className='h-auto p-0 font-semibold text-foreground hover:bg-transparent hover:text-primary transition-colors'>
+          Montant
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      ),
+      cell: ({ row }) => {
+        const amount = parseFloat(row.getValue("amount"));
+        const formatted = new Intl.NumberFormat("fr-FR", {
+          style: "currency",
+          currency: "EUR",
+        }).format(amount);
+        const isVisible = visibleAmounts[row.original.id] || false;
+
+        return (
+          <div className='text-start flex items-center gap-2'>
+            <div
+              className={cn(
+                "font-semibold text-foreground select-none cursor-none",
+                !isVisible ? "blur-sm" : "blur-none"
+              )}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}>
+              {isVisible ? formatted : "*****"}
+            </div>
+            <motion.button
+              onClick={() => {
+                if (!isVisible) {
+                  setSelectedRowId(row.original.id);
+                  setShowAmountConfirmation(true);
+                } else {
+                  setVisibleAmounts((prev) => ({
+                    ...prev,
+                    [row.original.id]: false,
+                  }));
+                }
+              }}
+              whileHover={{ scale: 1.1 }}
+              animate={{ rotate: !isVisible ? 0 : 180 }}
+              transition={{ duration: 0.3 }}
+              className='p-1 rounded-full hover:bg-gray-100 transition-colors duration-200'>
+              {!isVisible ? (
+                <Eye className='w-4 h-4 ' />
+              ) : (
+                <EyeOff className='w-4 h-4 ' />
+              )}
+            </motion.button>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "date",
+      header: "Date",
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("date"));
+        const formatted = date.toLocaleDateString("fr-FR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+
+        return <div className='text-sm text-muted-foreground'>{formatted}</div>;
+      },
+    },
+  ];
 
   const table = useReactTable({
     data,
@@ -379,6 +402,13 @@ export default function BizDataTable({ title, data }: BizDataTableProps) {
             )}
           </CardContent>
         </Card>
+
+        <ConfirmationSecret
+          isOpen={showAmountConfirmation}
+          onClose={() => setShowAmountConfirmation(false)}
+          onConfirm={handleAmountConfirmation}
+          title="Confirmation d'accès au montant"
+        />
       </div>
     </div>
   );

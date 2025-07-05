@@ -213,7 +213,7 @@ export const BizInput = ({
                     : // Utiliser des caractères de remplacement quand le montant est masqué
                       "*****"}
                 </div>
-                <button
+                <motion.button
                   onClick={() => {
                     if (!isAmountVisible) {
                       setShowAmountConfirmation(true);
@@ -227,17 +227,16 @@ export const BizInput = ({
                     !isAmountVisible
                       ? "Masquer le montant"
                       : "Afficher le montant"
-                  }>
-                  <motion.div
-                    animate={{ rotate: isAmountVisible ? 0 : 180 }}
-                    transition={{ duration: 0.3 }}>
-                    {!isAmountVisible ? (
-                      <Eye className='w-4 h-4' />
-                    ) : (
-                      <EyeOff className='w-4 h-4' />
-                    )}
-                  </motion.div>
-                </button>
+                  }
+                  whileHover={{ scale: 1.1 }}
+                  animate={{ rotate: isAmountVisible ? 0 : 180 }}
+                  transition={{ duration: 0.3 }}>
+                  {!isAmountVisible ? (
+                    <Eye className='w-4 h-4' />
+                  ) : (
+                    <EyeOff className='w-4 h-4' />
+                  )}
+                </motion.button>
               </div>
             </motion.div>
           )}
