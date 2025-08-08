@@ -17,7 +17,7 @@ export const NavButtonMobile = ({
     <div className='flex justify-content-center items-center p-4 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl border border-green-200 hover:from-green-100 hover:to-emerald-200 transition-all duration-200'>
       <button
         onClick={() => onClick(item.href)}
-        className='w-full flex justify-center items-center py-4'>
+        className='w-full flex justify-center items-center py-2'>
         <span className='text-sm font-medium text-gray-700 whitespace-nowrap'>
           {item.label}
         </span>
